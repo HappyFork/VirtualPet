@@ -1,2 +1,2 @@
 # VirtualPet
- Prototyping a virtual pet game
+ Prototype for a virtual pet game
