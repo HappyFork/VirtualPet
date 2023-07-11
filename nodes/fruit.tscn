@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6a42ia1vbmuk"]
+
+[ext_resource type="Texture2D" uid="uid://7sehix6g0rlv" path="res://assets/seed.png" id="1_ls63k"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b0axe"]
+radius = 14.0
+height = 46.0
+
+[node name="Fruit" type="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ls63k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_b0axe")

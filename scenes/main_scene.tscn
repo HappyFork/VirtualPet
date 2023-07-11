@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://bkyb1cfaoilqt"]
+
+[ext_resource type="Texture2D" uid="uid://d0phswy7amb1m" path="res://assets/freepikplayground.jpg" id="1_cdxl5"]
+[ext_resource type="PackedScene" uid="uid://c34fcdtcvw62b" path="res://nodes/pet.tscn" id="1_huepi"]
+[ext_resource type="PackedScene" uid="uid://b6a42ia1vbmuk" path="res://nodes/fruit.tscn" id="2_0o5g8"]
+[ext_resource type="Script" path="res://scripts/camera.gd" id="4_coddi"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_qps6y"]
+vertices = PackedVector2Array(-1010, -716, 1486, -696, 1486, 844, -1010, 852)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-1010, -716, 1486, -696, 1486, 844, -1010, 852)])
+
+[node name="MainScene" type="Node2D"]
+
+[node name="Garden" type="TextureRect" parent="."]
+offset_left = -1056.0
+offset_top = -758.0
+offset_right = 1543.0
+offset_bottom = 893.0
+texture = ExtResource("1_cdxl5")
+
+[node name="Pet" parent="." instance=ExtResource("1_huepi")]
+position = Vector2(291, 221)
+script = null
+
+[node name="Fruit" parent="." instance=ExtResource("2_0o5g8")]
+position = Vector2(151, 50)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_qps6y")
+
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
+position_smoothing_enabled = true
+script = ExtResource("4_coddi")
+target = NodePath("../Pet")
