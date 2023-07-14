@@ -19,15 +19,14 @@ offset_right = 1543.0
 offset_bottom = 893.0
 texture = ExtResource("1_cdxl5")
 
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_qps6y")
+
 [node name="Pet" parent="." instance=ExtResource("1_huepi")]
-position = Vector2(291, 221)
-script = null
+position = Vector2(290, 208)
 
 [node name="Fruit" parent="." instance=ExtResource("2_0o5g8")]
 position = Vector2(151, 50)
-
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
-navigation_polygon = SubResource("NavigationPolygon_qps6y")
 
 [node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
 position_smoothing_enabled = true
