@@ -6,7 +6,7 @@
 radius = 14.0
 height = 46.0
 
-[node name="Fruit" type="Area2D"]
+[node name="Fruit" type="Area2D" groups=["DecImpact", "Food"]]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)

@@ -17,3 +17,7 @@ texture = ExtResource("1_02ebf")
 shape = SubResource("CircleShape2D_bj7w6")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="WaitTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="WaitTimer" to="." method="_on_wait_timer_timeout"]
