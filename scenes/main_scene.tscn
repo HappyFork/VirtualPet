@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bkyb1cfaoilqt"]
+[gd_scene load_steps=8 format=3 uid="uid://bkyb1cfaoilqt"]
 
 [ext_resource type="Texture2D" uid="uid://d0phswy7amb1m" path="res://assets/freepikplayground.jpg" id="1_cdxl5"]
 [ext_resource type="PackedScene" uid="uid://c34fcdtcvw62b" path="res://nodes/pet.tscn" id="1_huepi"]
 [ext_resource type="Script" path="res://scenes/main_scene.gd" id="1_n84gt"]
 [ext_resource type="PackedScene" uid="uid://b6a42ia1vbmuk" path="res://nodes/fruit.tscn" id="2_0o5g8"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="4_coddi"]
+[ext_resource type="Theme" uid="uid://bo0nksai8f3gg" path="res://themes/custom_theme.tres" id="6_p1ujo"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_qps6y"]
 vertices = PackedVector2Array(-1010, -716, 1486, -696, 1486, 844, -1010, 852)
@@ -35,13 +36,14 @@ position_smoothing_enabled = true
 script = ExtResource("4_coddi")
 target = NodePath("../Pet")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="Panel" type="Panel" parent="CanvasLayer"]
-offset_left = 90.0
-offset_top = 54.0
-offset_right = 207.0
-offset_bottom = 165.0
+[node name="Panel" type="Panel" parent="UI"]
+offset_left = 32.0
+offset_top = 29.0
+offset_right = 190.0
+offset_bottom = 167.0
+theme = ExtResource("6_p1ujo")
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]
