@@ -2,33 +2,50 @@ class_name Pet
 extends CharacterBody2D
 
 
-# Variables
+### --- Variables, Enums, & Signals --- ###
+
+# Onready variables
 @onready var path = $NavigationAgent2D # Used to get paths on the navigationregion
 @onready var wait_timer = $WaitTimer # Set when deciding to wait
-@export var speed = 200.0 # Changing this does nothing.... so idk
+
+# Export variables
+@export var speed = 200.0 # Walking speed
+
+# Regular variables
 var state = states.DECIDING # What the pet is doing
-#var goal = states.DECIDING # What the pet wants to be doing
-var dec_influences = []
+var goal = states.DECIDING # What the pet wants to be doing
+var dec_influences = [] # Things in the scene that can influence a pet's decision
+var near = [] # Things the pet is near
+var needs = { # The current state of the pet's needs
+	"hunger": 0,
+	"energy": 100
+}
 
 # Enums
-enum states { NONE, DECIDING, WAITING, WALKING, EATING } # What state the pet is in
+enum states { NONE, DECIDING, WAITING, WALKING, EATING } # What state the pet is/wants to be in
 
 # Signals
 signal surveyed( s ) # Sees what's in the room
 
 
+### --- Engine functions --- ###
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	randomize()
-	call_deferred( "first_decision" )
+	randomize() # Make random numbers used later really random
+	call_deferred( "first_decision" ) # Make the first decision.
+	# This is deferred because the NavigationServer needs physics data.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	if path.is_navigation_finished():
-		if state == states.WALKING:
+		if state == states.WALKING and goal == states.WALKING:
 			state = states.DECIDING
 			decide_action()
+		elif state == states.WALKING and goal == states.EATING and near.any( is_fruit ) :
+			state = states.EATING
+			# TODO: what happens when a pet eats?
 		return
 	
 	var tar = path.get_next_path_position()
@@ -42,6 +59,8 @@ func _physics_process(delta):
 	move_and_slide()
 
 
+### --- Custom functions --- ###
+# Called deferred by the ready function. Decide what to do first
 func first_decision():
 	emit_signal( "surveyed", self )
 	await get_tree().physics_frame
@@ -49,7 +68,7 @@ func first_decision():
 	decide_action()
 
 
-# Decide where to go next
+# Decide what to do next
 func decide_action():
 	if !state == states.DECIDING:
 		return
@@ -92,9 +111,27 @@ func decide_action():
 	
 	decide_action()
 
+# Adds the passed node to the near array
+func add_near( node ):
+	near.append( node )
+
+# Removes all instances of the passed node from the near array
+func remove_near( node ):
+	if near.count( node ) > 0:
+		for x in range( near.count( node ) ):
+			near.erase( node )
+
+# Returns true if the passed node is a fruit
+func is_fruit( node ):
+	if node is Fruit:
+		return true
+	else:
+		return false
 
 
+### --- Signal functions --- ###
 
+# Called when the wait timer finishes
 func _on_wait_timer_timeout():
 	state = states.DECIDING
 	decide_action()

@@ -39,6 +39,7 @@ target = NodePath("../Pet")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Panel" type="Panel" parent="UI"]
+visible = false
 offset_left = 32.0
 offset_top = 29.0
 offset_right = 190.0

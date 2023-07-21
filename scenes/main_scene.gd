@@ -31,6 +31,3 @@ func _on_child_exiting_tree(node):
 
 func _on_pet_surveyed( looking : Pet ):
 	looking.dec_influences = dec_influences
-
-
-

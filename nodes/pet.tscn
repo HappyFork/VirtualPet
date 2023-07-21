@@ -20,6 +20,16 @@ shape = SubResource("CircleShape2D_bj7w6")
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 debug_enabled = true
 
+[node name="StateMachine" type="Node" parent="."]
+
+[node name="Deciding" type="Node" parent="StateMachine"]
+
+[node name="Idle" type="Node" parent="StateMachine"]
+
+[node name="Walking" type="Node" parent="StateMachine"]
+
+[node name="Eating" type="Node" parent="StateMachine"]
+
 [node name="WaitTimer" type="Timer" parent="."]
 
 [connection signal="timeout" from="WaitTimer" to="." method="_on_wait_timer_timeout"]
