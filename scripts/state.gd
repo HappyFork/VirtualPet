@@ -3,6 +3,7 @@ extends Node
 
 
 var state_machine = null # The state machine controlling this state
+var controlled_object = null # The owner of the state machine
 
 
 # Virtual function corresponding to _process()

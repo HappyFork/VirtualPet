@@ -30,13 +30,6 @@ signal surveyed( s ) # Sees what's in the room
 
 ### --- Engine functions --- ###
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	randomize() # Make random numbers used later really random
-	call_deferred( "first_decision" ) # Make the first decision.
-	# This is deferred because the NavigationServer needs physics data.
-
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	if path.is_navigation_finished():
@@ -60,56 +53,56 @@ func _physics_process(delta):
 
 
 ### --- Custom functions --- ###
-# Called deferred by the ready function. Decide what to do first
-func first_decision():
-	emit_signal( "surveyed", self )
-	await get_tree().physics_frame
-	
-	decide_action()
-
-
-# Decide what to do next
-func decide_action():
-	if !state == states.DECIDING:
-		return
-	
-	print( "Deciding..." )
-	var decision = randi_range( 0, 2 ) # Randomly choose between wait, wander, and eat
-	
-	match decision:
-		0: # Wait
-			print( "I want to wait" )
-			var w = randf_range( 10.0, 30.0 )
-			state = states.WAITING
-			wait_timer.wait_time = w
-			wait_timer.start()
-		1: # Wander
-			print( "I want to wander" )
-			var x = randf_range( -1100, 1600 )
-			var y = randf_range( -800, 900 )
-			var target = NavigationServer2D.map_get_closest_point( get_world_2d().navigation_map, Vector2( x, y ) )
-			path.set_target_position( target )
-			state = states.WALKING
-		2: # Eat
-			print( "I want to eat..." )
-			var nearest_fruit = null
-			for x in dec_influences:
-				if x.is_in_group( "Food" ) and nearest_fruit == null:
-					nearest_fruit = x.global_position
-				elif x.is_in_group( "Food" ):
-					var food_pos = x.global_position
-					if (global_position - food_pos) < (global_position - nearest_fruit):
-						nearest_fruit = food_pos
-			
-			if nearest_fruit != null:
-				print( "and I can!" )
-				path.set_target_position( nearest_fruit )
-				state = states.WALKING
-			else:
-				print( "but I can't :(" )
-				pass # :(
-	
-	decide_action()
+## Called deferred by the ready function. Decide what to do first
+#func first_decision():
+#	emit_signal( "surveyed", self )
+#	await get_tree().physics_frame
+#	
+#	decide_action()
+#
+#
+## Decide what to do next
+#func decide_action():
+#	if !state == states.DECIDING:
+#		return
+#	
+#	print( "Deciding..." )
+#	var decision = randi_range( 0, 2 ) # Randomly choose between wait, wander, and eat
+#	
+#	match decision:
+#		0: # Wait
+#			print( "I want to wait" )
+#			var w = randf_range( 10.0, 30.0 )
+#			state = states.WAITING
+#			wait_timer.wait_time = w
+#			wait_timer.start()
+#		1: # Wander
+#			print( "I want to wander" )
+#			var x = randf_range( -1100, 1600 )
+#			var y = randf_range( -800, 900 )
+#			var target = NavigationServer2D.map_get_closest_point( get_world_2d().navigation_map, Vector2( x, y ) )
+#			path.set_target_position( target )
+#			state = states.WALKING
+#		2: # Eat
+#			print( "I want to eat..." )
+#			var nearest_fruit = null
+#			for x in dec_influences:
+#				if x.is_in_group( "Food" ) and nearest_fruit == null:
+#					nearest_fruit = x.global_position
+#				elif x.is_in_group( "Food" ):
+#					var food_pos = x.global_position
+#					if (global_position - food_pos) < (global_position - nearest_fruit):
+#						nearest_fruit = food_pos
+#			
+#			if nearest_fruit != null:
+#				print( "and I can!" )
+#				path.set_target_position( nearest_fruit )
+#				state = states.WALKING
+#			else:
+#				print( "but I can't :(" )
+#				pass # :(
+#	
+#	decide_action()
 
 # Adds the passed node to the near array
 func add_near( node ):
@@ -120,6 +113,10 @@ func remove_near( node ):
 	if near.count( node ) > 0:
 		for x in range( near.count( node ) ):
 			near.erase( node )
+
+# Emit surveyed signal and get nodes in the scene
+func survey():
+	emit_signal( "surveyed", self )
 
 # Returns true if the passed node is a fruit
 func is_fruit( node ):

@@ -16,14 +16,14 @@ func _ready():
 
 
 func _on_child_entered_tree(node):
-	print( "Child entered" )
+	#print( "Child entered" )
 	if node.is_in_group( "DecImpact" ):
-		print( "Adding " + node.name )
+		#print( "Adding " + node.name )
 		dec_influences.append( node )
 
 
 func _on_child_exiting_tree(node):
-	print( "Child exited" )
+	#print( "Child exited" )
 	if node.is_in_group( "DecImpact" ) and dec_influences.count( node ) > 0:
 		for i in range( dec_influences.count( node ) ):
 			dec_influences.erase( node )
