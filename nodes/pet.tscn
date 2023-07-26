@@ -13,7 +13,6 @@ radius = 25.02
 [node name="Pet" type="CharacterBody2D"]
 motion_mode = 1
 script = ExtResource("1_na476")
-speed = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -20)
@@ -32,6 +31,7 @@ script = ExtResource("3_ugjxf")
 script = ExtResource("4_a0x73")
 
 [node name="WaitTimer" type="Timer" parent="StateMachine/Idle"]
+one_shot = true
 
 [node name="Walking" type="Node" parent="StateMachine" node_paths=PackedStringArray("path")]
 script = ExtResource("5_8f7q0")

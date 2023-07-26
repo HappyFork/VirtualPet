@@ -6,7 +6,7 @@ extends CharacterBody2D
 
 # Onready variables
 @onready var path = $NavigationAgent2D # Used to get paths on the navigationregion
-@onready var wait_timer = $WaitTimer # Set when deciding to wait
+#@onready var wait_timer = $WaitTimer # Set when deciding to wait
 
 # Export variables
 @export var speed = 200.0 # Walking speed
@@ -30,26 +30,26 @@ signal surveyed( s ) # Sees what's in the room
 
 ### --- Engine functions --- ###
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):
-	if path.is_navigation_finished():
-		if state == states.WALKING and goal == states.WALKING:
-			state = states.DECIDING
-			decide_action()
-		elif state == states.WALKING and goal == states.EATING and near.any( is_fruit ) :
-			state = states.EATING
-			# TODO: what happens when a pet eats?
-		return
-	
-	var tar = path.get_next_path_position()
-	var pos = global_position
-	var vel : Vector2 = tar - pos
-	
-	vel = vel.normalized()
-	vel = vel * speed
-	
-	velocity = vel
-	move_and_slide()
+## Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _physics_process(delta):
+#	if path.is_navigation_finished():
+#		if state == states.WALKING and goal == states.WALKING:
+#			state = states.DECIDING
+#			decide_action()
+#		elif state == states.WALKING and goal == states.EATING and near.any( is_fruit ) :
+#			state = states.EATING
+#			# TODO: what happens when a pet eats?
+#		return
+#	
+#	var tar = path.get_next_path_position()
+#	var pos = global_position
+#	var vel : Vector2 = tar - pos
+#	
+#	vel = vel.normalized()
+#	vel = vel * speed
+#	
+#	velocity = vel
+#	move_and_slide()
 
 
 ### --- Custom functions --- ###
@@ -129,6 +129,6 @@ func is_fruit( node ):
 ### --- Signal functions --- ###
 
 # Called when the wait timer finishes
-func _on_wait_timer_timeout():
-	state = states.DECIDING
-	decide_action()
+#func _on_wait_timer_timeout():
+#	state = states.DECIDING
+#	decide_action()
