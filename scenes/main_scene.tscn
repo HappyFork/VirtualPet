@@ -39,12 +39,18 @@ target = NodePath("../Pet")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Panel" type="Panel" parent="UI"]
-visible = false
 offset_left = 32.0
 offset_top = 29.0
-offset_right = 190.0
-offset_bottom = 167.0
+offset_right = 173.0
+offset_bottom = 69.0
 theme = ExtResource("6_p1ujo")
+
+[node name="Label" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 17.0
+offset_right = 141.0
+offset_bottom = 40.0
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]

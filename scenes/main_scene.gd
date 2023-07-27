@@ -1,10 +1,13 @@
 extends Node2D
 
 
+# Variables
+@onready var pet = $Pet # For debug
+@onready var db_label = $UI/Panel/Label # For debug
 var dec_influences : Array[Node]
 
 
-# Called when the node enters the scene tree for the first time.
+# Engine functions
 func _ready():
 	var kids = get_children()
 	for k in kids:
@@ -14,7 +17,11 @@ func _ready():
 		if k is Pet:
 			k.dec_influences = dec_influences
 
+func _process(delta):
+	db_label.text = pet.state_machine.state.name
 
+
+# Signal functions
 func _on_child_entered_tree(node):
 	#print( "Child entered" )
 	if node.is_in_group( "DecImpact" ):

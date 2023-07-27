@@ -5,24 +5,25 @@ extends CharacterBody2D
 ### --- Variables, Enums, & Signals --- ###
 
 # Onready variables
-@onready var path = $NavigationAgent2D # Used to get paths on the navigationregion
+@onready var path = $NavigationAgent2D # Used to get paths on the navigation region
+@onready var state_machine = $StateMachine # The pet's state machine
 #@onready var wait_timer = $WaitTimer # Set when deciding to wait
 
 # Export variables
 @export var speed = 200.0 # Walking speed
 
 # Regular variables
-var state = states.DECIDING # What the pet is doing
-var goal = states.DECIDING # What the pet wants to be doing
-var dec_influences = [] # Things in the scene that can influence a pet's decision
-var near = [] # Things the pet is near
+#var state = states.DECIDING # What the pet is doing
+#var goal = states.DECIDING # What the pet wants to be doing
+var dec_influences : Array[Node] # Things in the scene that can influence a pet's decision
+var near : Array[Node] # Things the pet is near
 var needs = { # The current state of the pet's needs
 	"hunger": 0,
 	"energy": 100
 }
 
 # Enums
-enum states { NONE, DECIDING, WAITING, WALKING, EATING } # What state the pet is/wants to be in
+#enum states { NONE, DECIDING, WAITING, WALKING, EATING } # What state the pet is/wants to be in
 
 # Signals
 signal surveyed( s ) # Sees what's in the room

@@ -43,7 +43,7 @@ func first_decision():
 
 func decide_next_action(): # Decide what to do next
 	print( "Deciding..." )
-	var decision = 1 #randi_range( 0, 2 ) # Randomly choose between wait, wander, and eat
+	var decision = randi_range( 0, 2 ) # Randomly choose between wait, wander, and eat
 	
 	match decision:
 		0: # Wait
@@ -55,12 +55,33 @@ func decide_next_action(): # Decide what to do next
 			var y = randf_range( wander_y_min, wander_y_max )
 			var msg = {
 				"goal": "wander",
-				"x": x,
-				"y": y
+				"target": Vector2(x, y)
 			}
 			transition_to( "Walking", msg )
 		2: # Eat
 			print( "I want to eat" )
+			var nearest_fruit = null
+			for x in sm_owner.dec_influences:
+				if x.is_in_group( "Food" ) and nearest_fruit == null:
+					nearest_fruit = x
+				elif x.is_in_group( "Food" ):
+					var food_pos = x.global_position
+					var near_pos = nearest_fruit.global_position
+					if (sm_owner.global_position - food_pos) < (sm_owner.global_position - near_pos):
+						nearest_fruit = x
+			if nearest_fruit != null:
+				print( "and I can!" )
+				var msg = {
+					"goal": "eat",
+					"target": nearest_fruit.global_position,
+					"next_msg": {
+						"food": nearest_fruit
+					}
+				}
+				transition_to( "Walking", msg )
+			else:
+				print( "but I can't :(" )
+				decide_next_action()
 
 func transition_to( target_state_path: String, msg: Dictionary = {} ) -> void:
 	# Transition to the passed-in state.

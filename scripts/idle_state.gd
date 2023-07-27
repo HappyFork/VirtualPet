@@ -8,7 +8,7 @@ extends State
 
 # Called by the state machine when it changes to this state
 func enter( _msg := {} ) -> void:
-	print( "Is this going?" )
+	#print( "Is this going?" )
 	var w = randf_range( wait_min, wait_max )
 	timer.wait_time = w
 	timer.start()
