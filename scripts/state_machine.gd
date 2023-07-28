@@ -6,13 +6,15 @@ extends Node
 
 # Variables & Signals
 #@export var initial_state : NodePath
-@export var wander_x_min : float = -1100
-@export var wander_x_max : float = 1600
-@export var wander_y_min : float = -800
+@export var wander_x_min : float = -1100 # The range of random points
+@export var wander_x_max : float = 1600 # where the pet can wander
+@export var wander_y_min : float = -800 # if it chooses to
 @export var wander_y_max : float = 900
-@onready var state: State# = get_node( initial_state )
-@onready var sm_owner = get_parent()
-signal transitioned( state_name )
+
+@onready var state: State# = get_node( initial_state ) # The machine's current state
+@onready var sm_owner = get_parent() # The pet that owns the machine
+
+signal transitioned( state_name ) # Change states
 
 
 # Engine Functions
@@ -27,16 +29,16 @@ func _ready(): # When the state machine enters a scene tree
 		# This is deferred because the NavigationServer needs physics data.
 
 func _process(delta): # Every frame
-	if state != null:
-		state.update( delta )
+	if state != null: # If there's a state,
+		state.update( delta ) # Call its update virtual function
 
 func _physics_process(delta): # Every physics frame
-	if state != null:
-		state.physics_update( delta )
+	if state != null: # If there's a state,
+		state.physics_update( delta ) # Call its physics_update virtual function
 
 
 # Custom functions
-func first_decision():
+func first_decision(): # I'm not commenting this bc I think I'm gonna delete it
 	sm_owner.survey()
 	await get_tree().physics_frame
 	decide_next_action()
@@ -48,40 +50,45 @@ func decide_next_action(): # Decide what to do next
 	match decision:
 		0: # Wait
 			print( "I want to wait" )
-			transition_to( "Idle" )
+			transition_to( "Idle" ) # Switch to idle state
 		1: # Wander
 			print( "I want to wander" )
+			# Pick a random x coordinate in range
 			var x = randf_range( wander_x_min, wander_x_max )
+			# Pick a random y coordinate in range
 			var y = randf_range( wander_y_min, wander_y_max )
-			var msg = {
-				"goal": "wander",
-				"target": Vector2(x, y)
+			var msg = { # Let the walking state know...
+				"goal": "wander", # the pet's just wandering,
+				"target": Vector2(x, y) # and where it's going
 			}
-			transition_to( "Walking", msg )
+			transition_to( "Walking", msg ) # Switch to walking state
 		2: # Eat
 			print( "I want to eat" )
-			var nearest_fruit = null
-			for x in sm_owner.dec_influences:
-				if x.is_in_group( "Food" ) and nearest_fruit == null:
-					nearest_fruit = x
-				elif x.is_in_group( "Food" ):
-					var food_pos = x.global_position
-					var near_pos = nearest_fruit.global_position
+			var nearest_food = null # Find the nearest fruit
+			for x in sm_owner.dec_influences: # Look at the decision influences
+				if x.is_in_group( "Food" ) and nearest_food == null:
+					# If it's food and we haven't found another food yet
+					nearest_food = x # It's the nearest food
+				elif x.is_in_group( "Food" ): # If it is food, but we already found one
+					var food_pos = x.global_position # Compare the position of this food
+					var near_pos = nearest_food.global_position # To the nearest food
 					if (sm_owner.global_position - food_pos) < (sm_owner.global_position - near_pos):
-						nearest_fruit = x
-			if nearest_fruit != null:
+						# If it's closer, replace the nearest food with this food
+						nearest_food = x
+			
+			if nearest_food != null: # If there is any food in the garden,
 				print( "and I can!" )
-				var msg = {
-					"goal": "eat",
-					"target": nearest_fruit.global_position,
-					"next_msg": {
-						"food": nearest_fruit
+				var msg = { # Let the walking state know...
+					"goal": "eat", # the pet wants to eat
+					"target": nearest_food.global_position, # where the food is
+					"next_msg": { # and WHAT the food is (for the eating state)
+						"food": nearest_food
 					}
 				}
 				transition_to( "Walking", msg )
-			else:
+			else: # If there's no food in the garden,
 				print( "but I can't :(" )
-				decide_next_action()
+				decide_next_action() # Decide a new action
 
 func transition_to( target_state_path: String, msg: Dictionary = {} ) -> void:
 	# Transition to the passed-in state.

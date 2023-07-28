@@ -31,10 +31,10 @@ position = Vector2(290, 208)
 [node name="Fruit" parent="." instance=ExtResource("2_0o5g8")]
 position = Vector2(151, 50)
 
-[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("focus")]
 position_smoothing_enabled = true
 script = ExtResource("4_coddi")
-target = NodePath("../Pet")
+focus = NodePath("../Pet")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
