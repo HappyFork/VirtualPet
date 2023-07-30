@@ -39,3 +39,8 @@ func _on_child_exiting_tree(node): # Called when a child node is removed
 
 func _on_pet_surveyed( looking : Pet ): # Called when a pet surveys the garden
 	looking.dec_influences = dec_influences # Send it the dec_influences array
+
+func _on_timer_timeout():
+	for k in get_children():
+		if k is Pet:
+			k.pass_time()

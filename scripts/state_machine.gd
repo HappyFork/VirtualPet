@@ -5,13 +5,13 @@ extends Node
 
 
 # Variables & Signals
-#@export var initial_state : NodePath
+@export var initial_state : NodePath # The state the machine starts in (idle)
 @export var wander_x_min : float = -1100 # The range of random points
 @export var wander_x_max : float = 1600 # where the pet can wander
 @export var wander_y_min : float = -800 # if it chooses to
 @export var wander_y_max : float = 900
 
-@onready var state: State# = get_node( initial_state ) # The machine's current state
+@onready var state: State = get_node( initial_state ) # The machine's current state
 @onready var sm_owner = get_parent() # The pet that owns the machine
 
 signal transitioned( state_name ) # Change states
@@ -24,9 +24,7 @@ func _ready(): # When the state machine enters a scene tree
 		child.state_machine = self # Let it know this is the state machine.
 		child.controlled_object = sm_owner # Let it know who the owner is.
 	randomize() # Make random numbers used later really random
-	#state.enter() # Run enter on the initial state.
-	call_deferred( "first_decision" ) # Make the first decision.
-		# This is deferred because the NavigationServer needs physics data.
+	state.enter() # Run enter on the initial state.
 
 func _process(delta): # Every frame
 	if state != null: # If there's a state,
@@ -38,11 +36,6 @@ func _physics_process(delta): # Every physics frame
 
 
 # Custom functions
-func first_decision(): # I'm not commenting this bc I think I'm gonna delete it
-	sm_owner.survey()
-	await get_tree().physics_frame
-	decide_next_action()
-
 func decide_next_action(): # Decide what to do next
 	print( "Deciding..." )
 	var decision = randi_range( 0, 2 ) # Randomly choose between wait, wander, and eat

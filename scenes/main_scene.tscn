@@ -52,6 +52,11 @@ offset_top = 17.0
 offset_right = 141.0
 offset_bottom = 40.0
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]
 [connection signal="surveyed" from="Pet" to="." method="_on_pet_surveyed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

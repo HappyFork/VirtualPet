@@ -27,5 +27,9 @@ func remove_near( node ): # Removes all instances of the passed node from the ne
 		for x in range( near.count( node ) ): # For every instance of the node in the array
 			near.erase( node ) # Remove it
 
+func pass_time(): # When time passes in the garden
+	needs.hunger += 1 # Hunger increases by 1
+	needs.energy -= 1 # Energy decreases by 1
+
 func survey(): # Emit surveyed signal and get decision impacts in the garden
 	emit_signal( "surveyed", self )
