@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bkyb1cfaoilqt"]
+[gd_scene load_steps=9 format=3 uid="uid://bkyb1cfaoilqt"]
 
 [ext_resource type="Texture2D" uid="uid://d0phswy7amb1m" path="res://assets/freepikplayground.jpg" id="1_cdxl5"]
 [ext_resource type="PackedScene" uid="uid://c34fcdtcvw62b" path="res://nodes/pet.tscn" id="1_huepi"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b6a42ia1vbmuk" path="res://nodes/fruit.tscn" id="2_0o5g8"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="4_coddi"]
 [ext_resource type="Theme" uid="uid://bo0nksai8f3gg" path="res://themes/custom_theme.tres" id="6_p1ujo"]
+[ext_resource type="Script" path="res://scripts/debug_ui.gd" id="6_v4w8a"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_qps6y"]
 vertices = PackedVector2Array(-1010, -716, 1486, -696, 1486, 844, -1010, 852)
@@ -36,25 +37,59 @@ position_smoothing_enabled = true
 script = ExtResource("4_coddi")
 focus = NodePath("../Pet")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("focus")]
+script = ExtResource("6_v4w8a")
+focus = NodePath("../Pet")
 
 [node name="Panel" type="Panel" parent="UI"]
 offset_left = 32.0
 offset_top = 29.0
-offset_right = 173.0
-offset_bottom = 69.0
+offset_right = 224.0
+offset_bottom = 169.0
 theme = ExtResource("6_p1ujo")
 
-[node name="Label" type="Label" parent="UI/Panel"]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 17.0
-offset_right = 141.0
-offset_bottom = 40.0
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 5.0
-autostart = true
+[node name="Name" type="Label" parent="UI/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Pet :)"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="UI/Panel/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="SLabel" type="Label" parent="UI/Panel/VBoxContainer/Grid"]
+layout_mode = 2
+text = "State:"
+
+[node name="State" type="Label" parent="UI/Panel/VBoxContainer/Grid"]
+layout_mode = 2
+
+[node name="HLabel" type="Label" parent="UI/Panel/VBoxContainer/Grid"]
+layout_mode = 2
+text = "Hunger:"
+
+[node name="Hunger" type="Label" parent="UI/Panel/VBoxContainer/Grid"]
+layout_mode = 2
+
+[node name="ELabel" type="Label" parent="UI/Panel/VBoxContainer/Grid"]
+layout_mode = 2
+text = "Energy:"
+
+[node name="Energy" type="Label" parent="UI/Panel/VBoxContainer/Grid"]
+layout_mode = 2
 
 [connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]

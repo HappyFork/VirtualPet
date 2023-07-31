@@ -1,10 +1,6 @@
 extends Node2D
 
 
-# Variables
-@onready var pet = $Pet # For debug
-@onready var db_label = $UI/Panel/Label # For debug
-
 var dec_influences : Array[Node] # Things that can influence a pet's decision
 
 
@@ -17,10 +13,6 @@ func _ready(): # When the scene starts
 	for k in kids: # Check each child
 		if k is Pet: # for each pet,
 			k.dec_influences = dec_influences # send it the dec_influences array
-
-func _process(delta): # Every frame
-	db_label.text = pet.state_machine.state.name # Show the pet's state in the panel
-	# TODO: This crashes right now bc the state machine doesn't have a state at first
 
 
 # Signal functions
