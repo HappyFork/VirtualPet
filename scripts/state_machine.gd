@@ -38,7 +38,8 @@ func _physics_process(delta): # Every physics frame
 # Custom functions
 func decide_next_action(): # Decide what to do next
 	print( "Deciding..." )
-	var decision = randi_range( 0, 2 ) # Randomly choose between wait, wander, and eat
+	var decision = sm_owner.get_weights()
+	
 	
 	match decision:
 		0: # Wait

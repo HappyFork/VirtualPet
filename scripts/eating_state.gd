@@ -9,7 +9,6 @@ var food = null # The food currently being eaten
 func enter( msg := {} ) -> void: # When pet enters this state
 	food = msg.food # Save the node the pet was moving to
 	if controlled_object.near.has( food ): # If the food the pet was moving to is near it, 
-		# TODO: This doesn't work. Find out why.
 		food.get_parent().remove_child( food ) # Remove food from the main scene (seems convoluted)
 		controlled_object.remove_near( food ) # Take it out of the pet's near array
 		food.position = Vector2.ZERO # Reset it's position to 0
@@ -25,6 +24,8 @@ func exit() -> void: # When pet leaves this state
 # Custom functions
 func bite(): # When the pet bites the food
 	food.shrink() # Make the food get smaller
+	controlled_object.needs.hunger -= 5 # Releive some hunger
+	# TODO: Amount of hunger reduced should be determined by the food
 	await get_tree().create_timer(1.5).timeout # Wait a bit
 	# TODO: Wait time should be a variable
 	if is_instance_valid( food ): # If the food still exists (hasn't been freed)

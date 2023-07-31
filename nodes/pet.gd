@@ -33,3 +33,15 @@ func pass_time(): # When time passes in the garden
 
 func survey(): # Emit surveyed signal and get decision impacts in the garden
 	emit_signal( "surveyed", self )
+
+func get_weights() -> Dictionary: # How likely a pet is to do something based on it's current needs
+	# This isn't a perfect algorithm, but I think a real one will need way more math.
+	var eat = needs.hunger / 100.0
+	var sleep = (needs.energy - 100) / 100.0
+	var nothin = 1.0 - (eat + sleep)
+	return {
+		"wait": nothin/2,
+		"wander": nothin/2,
+		"eat": eat,
+		"sleep": sleep
+	}
