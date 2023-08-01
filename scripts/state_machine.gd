@@ -38,14 +38,15 @@ func _physics_process(delta): # Every physics frame
 # Custom functions
 func decide_next_action(): # Decide what to do next
 	print( "Deciding..." )
-	var decision = sm_owner.get_weights()
-	
+	var weights = sm_owner.get_weights()
+	print( weights )
+	var decision = pick_weighted( weights )
 	
 	match decision:
-		0: # Wait
+		"wait": # Wait
 			print( "I want to wait" )
 			transition_to( "Idle" ) # Switch to idle state
-		1: # Wander
+		"wander": # Wander
 			print( "I want to wander" )
 			# Pick a random x coordinate in range
 			var x = randf_range( wander_x_min, wander_x_max )
@@ -56,7 +57,7 @@ func decide_next_action(): # Decide what to do next
 				"target": Vector2(x, y) # and where it's going
 			}
 			transition_to( "Walking", msg ) # Switch to walking state
-		2: # Eat
+		"eat": # Eat
 			print( "I want to eat" )
 			var nearest_food = null # Find the nearest fruit
 			for x in sm_owner.dec_influences: # Look at the decision influences
@@ -83,6 +84,11 @@ func decide_next_action(): # Decide what to do next
 			else: # If there's no food in the garden,
 				print( "but I can't :(" )
 				decide_next_action() # Decide a new action
+		"sleep": # Sleep
+			print( "I want to sleep" ) # But that's not implemented yet
+			decide_next_action() # This is the equivalent of pass
+		_:
+			print( "This shouldn't happen. pick_weighted() returned " + decision )
 
 func transition_to( target_state_path: String, msg: Dictionary = {} ) -> void:
 	# Transition to the passed-in state.
@@ -92,3 +98,21 @@ func transition_to( target_state_path: String, msg: Dictionary = {} ) -> void:
 	state = get_node( target_state_path ) # Change states
 	state.enter( msg ) # Run new state's enter code
 	emit_signal( "transitioned", state.name ) # Emit transitioned signal
+
+func pick_weighted( weights : Dictionary ) -> String:
+	# Pick a random option based on the associated probability
+	# Shout outs to @SnepGem on Cohost for helping me with this :)
+	var no_blanks = weights.duplicate() # Make a duplicate dictionary
+	for k in weights: # Find all the options with a 0% probability
+		if weights[k] <= 0.000001: # (accounting for float weirdness)
+			no_blanks.erase( k ) # and remove them from the duplicate
+	
+	var choice = randf() # Generate a random float between 0.0 and 1.0
+	var target_prob = 0.0
+	
+	for k in no_blanks:
+		target_prob += no_blanks[k]
+		if choice < target_prob:
+			return k
+	
+	return "" # This should never happen, but I get an error if it isn't here.

@@ -37,7 +37,7 @@ func survey(): # Emit surveyed signal and get decision impacts in the garden
 func get_weights() -> Dictionary: # How likely a pet is to do something based on it's current needs
 	# This isn't a perfect algorithm, but I think a real one will need way more math.
 	var eat = needs.hunger / 100.0
-	var sleep = (needs.energy - 100) / 100.0
+	var sleep = (100 - needs.energy) / 100.0
 	var nothin = 1.0 - (eat + sleep)
 	return {
 		"wait": nothin/2,
